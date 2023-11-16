@@ -123,17 +123,10 @@ public class PeliculasController {
                     actores.add(new Actor());
                 }
             }
-        //    actores = actores.stream().filter(actor -> actor.getId() != null).collect(Collectors.toList());
             pelicula.setActores(new HashSet<>(actores));
         }
         peliculasService.guardarPelicula(pelicula);
     }
-
-    /*@PutMapping("/{id}")
-    public void actualizarPelicula(@PathVariable("id") Integer id, @RequestBody Pelicula pelicula) {
-        pelicula.setId(id);
-        peliculasService.actualizarPelicula(pelicula);
-    }*/
 
     @PutMapping("/{id}")
     public void actualizarPelicula(@PathVariable("id") Integer id, @RequestBody PeliculaDTO peliculaDTO) {
@@ -175,9 +168,17 @@ public class PeliculasController {
 
 
     @DeleteMapping("/{id}")
-    public void eliminarPelicula(@PathVariable("id") Integer id) {
-        peliculasService.eliminarPelicula(id);
+    public ResponseEntity<String> eliminarPelicula(@PathVariable("id") Integer id) {
+        Pelicula peliculaExistente = peliculasService.buscarPeliculaPorId(id);
+
+        if (peliculaExistente != null) {
+            peliculasService.eliminarPelicula(id);
+            return new ResponseEntity<>("Pelicula eliminada correctamente", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("No se encontró la película con ID: " + id, HttpStatus.NOT_FOUND);
+        }
     }
+
 }
 
 
