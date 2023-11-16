@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Listado de Películas</title>
+
+    <!-- jQuery y Bootstrap (incluyendo Popper.js) desde CDN -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!-- Bootstrap CSS desde CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+    <div class="container mt-4">
+        <h2 th:text="${titulo}" class="text-center mb-5"></h2>
+
+        <!-- Mensaje de éxito o error, si es necesario -->
+        <div th:if="${msg != null}" class="alert alert-success" role="alert" th:text="${msg}"></div>
+
+
+        <!-- Formulario de búsqueda -->
+        <div class="row mb-2 d-flex justify-content-between">
+            <div class="col-md-6">
+                <form id="searchForm" class="form-inline" th:action="@{/peliculas/listado}" method="get">
+                    <div class="input-group">
+
+                        <div class="input-group-append">
+                            <!-- Selector de tipo de búsqueda -->
+                            <select id="tipo" class="form-control" name="tipo">
+                                <option value="titulo">Todos</option>
+                                <option value="titulo">Título</option>
+                                <option value="director">Director</option>
+                                <option value="actor">Actor</option>
+                                <option value="genero">Género</option>
+                                <option value="año">Año</option>
+                                <!-- Agrega más opciones según tus tipos de búsqueda -->
+                            </select>
+                            <!-- Campo de búsqueda -->
+                            <input class="form-control" type="text" placeholder="Buscar" aria-label="Buscar" id="query"
+                                   name="query">
+                            <!-- Botón para buscar -->
+                            <button class="btn btn-primary" type="submit">Buscar</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <!-- Botón para ir al formulario de nueva película -->
+            <div class="col-md-6 text-right">
+                <a class="btn btn-primary" th:href="@{/peliculas/nueva}">Nueva Película</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de listado de películas -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="text-center">ID</th>
+            <th class="text-center">Título</th>
+            <th class="text-center">Año</th>
+            <th class="text-center">Duración</th>
+            <th class="text-center">País</th>
+            <th class="text-center">Director</th>
+            <th class="text-center">Género</th>
+            <th class="text-center">Sinopsis</th>
+            <th class="text-center">Imagen</th>
+            <!-- Agrega más columnas según tus necesidades -->
+            <th class="text-center">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iteración sobre la lista de películas -->
+        <tr th:each="pelicula : ${listadoPeliculas}">
+            <td class="col-1 text-center" th:text="${pelicula.id}"></td>
+            <td class="col-5 text-center" th:text="${pelicula.titulo}"></td>
+            <td class="col-1 text-center" th:text="${pelicula.anno}"></td>
+            <td class="col-1 text-center" th:text="${pelicula.duracion}"></td>
+            <td class="col-1 text-center" th:text="${pelicula.pais}"></td>
+            <td class="col-1 text-center" th:text="${pelicula.director}"></td>
+            <td class="col-1 text-center" th:text="${pelicula.genero}"></td>
+            <td class="col-1">
+                <!-- Sinopsis con modal -->
+                <button type="button" class="btn btn-link" data-toggle="modal"
+                        th:data-target="'#sinopsisModal' + ${pelicula.id}">
+                    Ver sinopsis
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" th:id="'sinopsisModal' + ${pelicula.id}" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Sinopsis</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body text-center" th:text="${pelicula.sinopsis}"></div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="col-1 text-center">
+                <!-- Imagen -->
+                <img th:if="${pelicula.imagenPortada != null && #strings.length(pelicula.imagenPortada) > 0}"
+                     class="img-thumbnail rounded" style="max-width: 100px; max-height: 100px;"
+                     th:src="@{'/peliculas/uploads/' + ${pelicula.imagenPortada}}"
+                     th:alt="${pelicula.imagenPortada}"/>
+            </td>
+            <!-- Agrega más celdas según tus necesidades -->
+            <td class="col-2 text-center">
+                <div class="btn-group">
+                    <a class="btn btn-info btn-sm mr-2"
+                       th:href="@{/peliculas/detalle/{id}(id=${pelicula.id})}">Detalles</a>
+                    <a class="btn btn-warning btn-sm mr-2"
+                       th:href="@{/peliculas/editar/{id}(id=${pelicula.id})}">Editar</a>
+                    <a class="btn btn-danger btn-sm" th:href="@{/peliculas/borrar/{id}(id=${pelicula.id})}"
+                       onclick="return confirm('¿Estás seguro?')">Borrar</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <nav th:replace="paginator-nav :: paginator"></nav>
+</div>
+
+<!-- Agrega los scripts de Bootstrap y otros archivos JS aquí -->
+<!-- Por ejemplo, puedes usar los CDN de Bootstrap y jQuery -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- Agrega los scripts de Bootstrap y otros archivos JS aquí -->
+<!-- Por ejemplo, puedes usar los CDN de Bootstrap y jQuery -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>

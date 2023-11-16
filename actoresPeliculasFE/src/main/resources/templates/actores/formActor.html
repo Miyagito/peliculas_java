@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>ActoresApp | Aplicación de gestión de actores</title>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+  <h2 th:text="${titulo}" class="text-secondary border-bottom pb-2"></h2>
+
+  <!-- Mensaje de éxito o error, si es necesario -->
+  <div th:if="${msg != null}" class="alert alert-success mt-3" role="alert" th:text="${msg}"></div>
+
+  <form th:action="@{/actores/guardar/}" method="post" th:object="${actor}" enctype="multipart/form-data">
+    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger mt-3" role="alert">
+      <strong>Por favor corrija los siguientes errores:</strong>
+      <ul class="mb-0">
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"/>
+      </ul>
+    </div>
+    <div class="mb-3 mt-4">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" class="form-control" th:field="*{nombre}" id="nombre" name="nombre"
+             placeholder="Escriba el nombre del actor" required="required">
+    </div>
+    <div class="mb-3">
+      <label for="paisNacimiento" class="form-label">País de Nacimiento</label>
+      <input type="text" class="form-control" th:field="*{paisNacimiento}" id="paisNacimiento" name="paisNacimiento"
+             placeholder="Escriba el país de nacimiento del actor" required="required">
+    </div>
+    <div class="mb-3">
+      <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+      <div class="input-group">
+        <input type="date" class="form-control" th:field="*{fechaNacimiento}" id="fechaNacimiento" name="fechaNacimiento"
+               required="required">
+        <!-- Mostrar la fecha actual del actor solo en modo de edición -->
+        <div th:if="${actor.id != null}" class="input-group-append">
+          <span class="input-group-text" th:text="${actor.fechaNacimiento}"></span>
+        </div>
+      </div>
+    </div>
+
+
+    <button type="submit" class="btn btn-dark">Guardar</button>
+    <input type="hidden" th:field="*{id}"/>
+  </form>
+  <hr class="mt-4">
+  <a class="btn btn-primary" role="button" th:href="@{/peliculas/listado}">Ir a Listado de Peliculas</a>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>

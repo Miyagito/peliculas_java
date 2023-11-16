@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Detalles de la Película</title>
+
+    <!-- Bootstrap CSS desde CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2 th:text="${titulo}"></h2>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Detalles de la película</h5>
+
+            <!-- Agrega detalles de la película -->
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Título:</strong> <span th:text="${pelicula.titulo}"></span></li>
+                <li class="list-group-item"><strong>Año:</strong> <span th:text="${pelicula.anno}"></span></li>
+                <li class="list-group-item"><strong>Duración:</strong> <span th:text="${pelicula.duracion}"></span></li>
+                <li class="list-group-item"><strong>País:</strong> <span th:text="${pelicula.pais}"></span></li>
+                <li class="list-group-item"><strong>Director:</strong> <span th:text="${pelicula.director}"></span></li>
+                <li class="list-group-item"><strong>Género:</strong> <span th:text="${pelicula.genero}"></span></li>
+                <li class="list-group-item"><strong>Sinopsis:</strong> <span th:text="${pelicula.sinopsis}"></span></li>
+                <li class="list-group-item"><strong>Actores:</strong>
+                    <div class="list-group">
+                        <!-- Utiliza un bucle Thymeleaf para iterar sobre la lista de actores -->
+                        <div th:each="actor : ${actores}" class="list-group-item">
+                            <span th:text="${actor.nombre}"></span>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <strong>Imagen:</strong>
+                    <img th:if="${pelicula.imagenPortada != null && #strings.length(pelicula.imagenPortada) > 0}"
+                         class="img-thumbnail rounded" style="max-width: 200px;"
+                         th:src="@{'/peliculas/uploads/' + ${pelicula.imagenPortada}}"
+                         th:alt="${pelicula.imagenPortada}"/>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+
+    <a class="btn btn-primary" role="button" th:href="@{/peliculas/listado}">Volver al listado de películas</a>
+</div>
+
+<!-- Agrega los scripts de Bootstrap aquí -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>

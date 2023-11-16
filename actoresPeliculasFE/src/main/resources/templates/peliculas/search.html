@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav th:fragment="search">
+    <form th:action="@{/peliculas/listado}" method="get">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre"
+                   placeholder="Escriba el nombre del curso">
+        </div>
+        <button type="submit" class="btn btn-success">Buscar por Nombre</button>
+    </form>
+</nav>
+</body>
+</html>

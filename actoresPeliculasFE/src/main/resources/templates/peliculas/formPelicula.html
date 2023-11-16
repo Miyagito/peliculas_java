@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>ActoresApp | Aplicación de gestión de películas</title>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+  <h2 th:text="${titulo}" class="text-secondary border-bottom pb-2"></h2>
+
+  <!-- Mensaje de éxito o error, si es necesario -->
+  <div th:if="${msg != null}" class="alert alert-success mt-3" role="alert" th:text="${msg}"></div>
+
+  <form th:action="@{/peliculas/guardar}" method="post" th:object="${pelicula}" enctype="multipart/form-data">
+    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger mt-3" role="alert">
+      <strong>Por favor corrija los siguientes errores:</strong>
+      <ul class="mb-0">
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"/>
+      </ul>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <!-- Columna izquierda -->
+        <div class="mb-3">
+          <label for="imagenPortada" class="form-label">Imagen</label>
+          <img th:if="${pelicula.imagenPortada != null && #strings.length(pelicula.imagenPortada) > 0}"
+               class="img-thumbnail rounded float-left" style="max-width: 25%;"
+               th:src="@{'/peliculas/uploads/' + ${pelicula.imagenPortada}}" th:alt="${pelicula.imagenPortada}" />
+
+          <input type="imagenPortada" id="imagenPortada" name="imagenPortada" class="form-control"/>
+        </div>
+        <div class="mb-3">
+          <label for="titulo" class="form-label">Título</label>
+          <input type="text" class="form-control" th:field="*{titulo}" id="titulo" name="titulo"
+                 placeholder="Escriba el título de la película" required="required">
+        </div>
+        <div class="mb-3">
+          <label for="anno" class="form-label">Año</label>
+          <input type="text" class="form-control" th:field="*{anno}" id="anno" name="anno"
+                 placeholder="Escriba el año de la película" required="required">
+        </div>
+        <div class="mb-3">
+          <label for="duracion" class="form-label">Duración</label>
+          <input type="text" class="form-control" th:field="*{duracion}" id="duracion" name="duracion"
+                 placeholder="Escriba la duración de la película" required="required">
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <!-- Columna derecha -->
+        <div class="mb-3">
+          <label for="pais" class="form-label">País</label>
+          <input type="text" class="form-control" th:field="*{pais}" id="pais" name="pais"
+                 placeholder="Escriba el país de origen de la película" required="required">
+        </div>
+        <div class="mb-3">
+          <label for="genero" class="form-label">Género</label>
+          <input type="text" class="form-control" th:field="*{genero}" id="genero" name="genero"
+                 placeholder="Escriba el género de la película" required="required">
+        </div>
+        <div class="mb-3">
+          <label for="director" class="form-label">Director</label>
+          <input type="text" class="form-control" th:field="*{director}" id="director" name="director"
+                 placeholder="Escriba el director de la película" required="required">
+        </div>
+        <div class="mb-3">
+          <label for="sinopsis" class="form-label">Sinopsis</label>
+          <textarea class="form-control" th:field="*{sinopsis}" id="sinopsis" name="sinopsis"
+                    placeholder="Escriba la sinopsis de la película" required="required"></textarea>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Actores</label>
+        <!-- Itera sobre la lista de actores disponibles -->
+        <div class="form-row">
+          <div th:each="actor : ${actores}" class="col-md-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" th:id="${'actor-' + actor.id} "
+                     th:name="actores" th:value="${actor.id}"
+                     th:checked="${actoresEnPelicula != null and actoresEnPelicula.contains(actor)}">
+              <label class="form-check-label" th:for="${'actor-' + actor.id}" th:text="${actor.nombre}"></label>
+            </div>
+          </div>
+        </div>
+        <small class="form-text text-muted">Seleccione los actores de la película.
+          <!-- Agregar nuevo actor -->
+          <a th:href="@{/actores/nuevo}" class="text-primary ml-2">Agregar Nuevo Actor</a>
+        </small>
+      </div>
+    </div>
+
+    <!-- Agrega más campos según los requisitos de tu modelo Pelicula -->
+
+    <button type="submit" class="btn btn-dark">Guardar</button>
+    <input type="hidden" th:field="*{id}"/>
+  </form>
+  <hr class="mt-4">
+  <a class="btn btn-primary" role="button" th:href="@{/peliculas/listado}">Ir a Listado de Películas</a>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>
