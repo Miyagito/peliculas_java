@@ -129,11 +129,50 @@ public class PeliculasController {
         peliculasService.guardarPelicula(pelicula);
     }
 
-    @PutMapping("/{id}")
+    /*@PutMapping("/{id}")
     public void actualizarPelicula(@PathVariable("id") Integer id, @RequestBody Pelicula pelicula) {
         pelicula.setId(id);
         peliculasService.actualizarPelicula(pelicula);
+    }*/
+
+    @PutMapping("/{id}")
+    public void actualizarPelicula(@PathVariable("id") Integer id, @RequestBody PeliculaDTO peliculaDTO) {
+        // Obtén la película existente por ID
+        Pelicula peliculaExistente = peliculasService.buscarPeliculaPorId(id);
+
+        if (peliculaExistente != null) {
+            // Actualiza los campos de la película con los valores del DTO
+            peliculaExistente.setTitulo(peliculaDTO.getPelicula().getTitulo());
+            peliculaExistente.setDirector(peliculaDTO.getPelicula().getDirector());
+            // Actualiza otros campos según sea necesario
+
+            // Actualiza la lista de actores
+            List<Integer> idsActores = peliculaDTO.getActores();
+            if (idsActores != null) {
+                List<Actor> actores = new ArrayList<>();
+                for (Integer actorId : idsActores) {
+                    Actor actor = actoresService.buscarActorPorId(actorId);
+                    if (actor != null) {
+                        actores.add(actor);
+                    } else {
+                        actores.add(new Actor());
+                    }
+                }
+                peliculaExistente.setActores(new HashSet<>(actores));
+            } else {
+                // Si la lista de actores no se proporciona en la solicitud, puedes optar por borrarla o dejarla intacta,
+                // dependiendo de tus requisitos.
+                peliculaExistente.setActores(Collections.emptySet()); // Para borrar la lista
+            }
+
+            // Guarda la película actualizada
+            peliculasService.actualizarPelicula(peliculaExistente);
+        } else {
+            // Manejar el caso en que la película no existe
+            // Puedes devolver un error o realizar alguna otra acción
+        }
     }
+
 
     @DeleteMapping("/{id}")
     public void eliminarPelicula(@PathVariable("id") Integer id) {

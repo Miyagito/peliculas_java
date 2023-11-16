@@ -8,7 +8,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-//@Table(name = "Actores", schema = "actoresPeliculasDB")
 @Table(name = "Actores")
 public class Actor {
     @Id
