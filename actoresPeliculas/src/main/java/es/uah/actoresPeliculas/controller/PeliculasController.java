@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -128,43 +129,34 @@ public class PeliculasController {
         peliculasService.guardarPelicula(pelicula);
     }
 
-    @PutMapping("/{id}")
-    public void actualizarPelicula(@PathVariable("id") Integer id, @RequestBody PeliculaDTO peliculaDTO) {
-        // Obtén la película existente por ID
-        Pelicula peliculaExistente = peliculasService.buscarPeliculaPorId(id);
+    @PutMapping
+    public void actualizarPelicula(@RequestBody PeliculaDTO peliculaDTO, RedirectAttributes attributes) {
 
-        if (peliculaExistente != null) {
-            // Actualiza los campos de la película con los valores del DTO
-            peliculaExistente.setTitulo(peliculaDTO.getPelicula().getTitulo());
-            peliculaExistente.setDirector(peliculaDTO.getPelicula().getDirector());
-            // Actualiza otros campos según sea necesario
-
-            // Actualiza la lista de actores
-            List<Integer> idsActores = peliculaDTO.getActores();
-            if (idsActores != null) {
-                List<Actor> actores = new ArrayList<>();
-                for (Integer actorId : idsActores) {
-                    Actor actor = actoresService.buscarActorPorId(actorId);
-                    if (actor != null) {
-                        actores.add(actor);
-                    } else {
-                        actores.add(new Actor());
-                    }
+        Pelicula pelicula = peliculaDTO.getPelicula();
+        List<Integer>  ids = peliculaDTO.getActores();
+        if (ids != null) {
+            List<Actor> actores = new ArrayList<>();
+            for (Integer id : ids) {
+                Actor actor = actoresService.buscarActorPorId(id);
+                if (actor != null) {
+                    actores.add(actor);
+                } else {
+                    actores.add(new Actor());
                 }
-                peliculaExistente.setActores(new HashSet<>(actores));
-            } else {
-                // Si la lista de actores no se proporciona en la solicitud, puedes optar por borrarla o dejarla intacta,
-                // dependiendo de tus requisitos.
-                peliculaExistente.setActores(Collections.emptySet()); // Para borrar la lista
             }
-
+            pelicula.setActores(new HashSet<>(actores));
+        }
+        // Obtén la película existente por ID
+        if (peliculaDTO.getId() != null) {
             // Guarda la película actualizada
-            peliculasService.actualizarPelicula(peliculaExistente);
+            pelicula.setId(peliculaDTO.getId());
+            peliculasService.actualizarPelicula(pelicula);
         } else {
             // Manejar el caso en que la película no existe
-            // Puedes devolver un error o realizar alguna otra acción
+            attributes.addFlashAttribute("error", "Error al procesar la solicitud.");
         }
     }
+
 
 
     @DeleteMapping("/{id}")

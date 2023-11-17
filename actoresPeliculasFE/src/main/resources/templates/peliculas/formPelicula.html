@@ -15,6 +15,7 @@
   <div th:if="${msg != null}" class="alert alert-success mt-3" role="alert" th:text="${msg}"></div>
 
   <form th:action="@{/peliculas/guardar}" method="post" th:object="${pelicula}" enctype="multipart/form-data">
+    <input type="hidden" name="_method" th:value="${pelicula.id != null ? 'PUT' : 'POST'}" />
     <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger mt-3" role="alert">
       <strong>Por favor corrija los siguientes errores:</strong>
       <ul class="mb-0">
@@ -25,12 +26,16 @@
       <div class="col-md-6">
         <!-- Columna izquierda -->
         <div class="mb-3">
-          <label for="imagenPortada" class="form-label">Imagen</label>
           <img th:if="${pelicula.imagenPortada != null && #strings.length(pelicula.imagenPortada) > 0}"
                class="img-thumbnail rounded float-left" style="max-width: 25%;"
                th:src="@{'/peliculas/uploads/' + ${pelicula.imagenPortada}}" th:alt="${pelicula.imagenPortada}" />
 
-          <input type="imagenPortada" id="imagenPortada" name="imagenPortada" class="form-control"/>
+          <div class="mb-3">
+            <label for="file" class="col-sm-2 col-form-label">Imagen</label>
+            <div class="col-sm-6">
+              <input type="file" id="file" name="file" class="form-control" />
+            </div>
+          </div>
         </div>
         <div class="mb-3">
           <label for="titulo" class="form-label">Título</label>
@@ -96,13 +101,13 @@
 
     <button type="submit" class="btn btn-dark">Guardar</button>
     <input type="hidden" th:field="*{id}"/>
-  </form>
-  <hr class="mt-4">
-  <a class="btn btn-primary" role="button" th:href="@{/peliculas/listado}">Ir a Listado de Películas</a>
-</div>
+   </form>
+   <hr class="mt-4">
+   <a class="btn btn-primary" role="button" th:href="@{/peliculas/listado}">Ir a Listado de Películas</a>
+ </div>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
+ <!-- Bootstrap core JavaScript
+ ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

@@ -24,8 +24,6 @@ public interface IPeliculasService {
 
     List<Actor> buscarActoresPorPelicula(Integer idPelicula);
 
-    void guardarPeliculaConActores(Pelicula pelicula, List<Integer> idsActores);
-
     void guardarPelicula(Pelicula pelicula);
 
     void eliminarPelicula(Integer idPelicula);

@@ -82,29 +82,16 @@ public class PeliculasServiceImpl implements IPeliculasService{
         }
         peliculasDAO.guardarPelicula(pelicula);
     }
-
-    // no lo estoy usando
     @Override
-    public void guardarPeliculaConActores(Pelicula pelicula, List<Integer> idsActores) {
-        for (Integer idActor : idsActores) {
-            Actor actor = actoresDAO.buscarActorPorId(idActor);
-            if (actor != null) {
-                pelicula.agregarActor(actor);
-            }
+    public void actualizarPelicula(Pelicula pelicula) {
+        if (peliculasDAO.buscarPeliculaPorId(pelicula.getId()) != null) {
+            peliculasDAO.actualizarPelicula(pelicula);
         }
-        peliculasDAO.guardarPelicula(pelicula);
     }
     @Override
     public void eliminarPelicula(Integer idPelicula) {
         if (peliculasDAO.buscarPeliculaPorId(idPelicula)!=null) {
             peliculasDAO.eliminarPelicula(idPelicula);
-        }
-    }
-
-    @Override
-    public void actualizarPelicula(Pelicula pelicula) {
-        if (peliculasDAO.buscarPeliculaPorId(pelicula.getId()) != null) {
-            peliculasDAO.actualizarPelicula(pelicula);
         }
     }
 

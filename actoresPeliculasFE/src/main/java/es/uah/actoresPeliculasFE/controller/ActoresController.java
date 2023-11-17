@@ -1,6 +1,7 @@
 package es.uah.actoresPeliculasFE.controller;
 
 import es.uah.actoresPeliculasFE.model.Actor;
+import es.uah.actoresPeliculasFE.model.Pelicula;
 import es.uah.actoresPeliculasFE.service.IActoresService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

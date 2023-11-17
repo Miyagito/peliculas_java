@@ -8,6 +8,8 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Pelicula {
+
+
     private Integer anno;
     private Integer id;
     private String titulo;
@@ -20,10 +22,6 @@ public class Pelicula {
 
     private String imagenPortada;
 
-    //private List<Actor> reparto;
- //   private List<Pelicula> peliculas;
-  //  private Set<Actor> actores;
-
     public Pelicula(Integer id, String titulo, Integer anno, Integer duracion, String pais, String director, String genero,String sinopsis,String imagenPortada, List<Actor> reparto, List<Pelicula> peliculas, Set<Actor> actores) {
         this.id = id;
         this.titulo = titulo;
@@ -34,9 +32,7 @@ public class Pelicula {
         this.genero = genero;
         this.sinopsis = sinopsis;
         this.imagenPortada = imagenPortada;
-        //this.reparto = reparto;
-      //  this.peliculas = peliculas;
-      //  this.actores = actores;
+
     }
 
     public Pelicula() {
@@ -112,19 +108,6 @@ public class Pelicula {
     public void setSinopsis(String sinopsis) {
         this.sinopsis = sinopsis;
     }
-
-
-
-    /*public List<Actor> getReparto() {
-        return reparto;
-    }
-
-    public void setReparto(List<Actor> reparto) {
-        this.reparto = reparto;
-    }*/
-
-
-
 
     @Override
     public boolean equals(Object o) {

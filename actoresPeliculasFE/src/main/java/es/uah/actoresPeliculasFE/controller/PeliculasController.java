@@ -47,6 +47,12 @@ public class PeliculasController {
     @Autowired
     private IUploadFileService uploadFileService;
 
+
+    @GetMapping("/")
+    public String home() {
+        return "home";
+    }
+
     @GetMapping("/busqueda")
     public String search(Model model) {
         return "peliculas/search";
@@ -102,9 +108,10 @@ public class PeliculasController {
         return "peliculas/detallePelicula";
     }
 
-
-    @PostMapping("/guardar")
+    @RequestMapping(value = "/guardar", method = {RequestMethod.POST, RequestMethod.PUT})
+    //@PostMapping({"/guardar"})
     public String guardarPelicula(
+            @ModelAttribute Pelicula pelicula,
             @RequestParam("titulo") String titulo,
             @RequestParam("anno") Integer anno,
             @RequestParam("duracion") Integer duracion,
@@ -112,42 +119,60 @@ public class PeliculasController {
             @RequestParam("director") String director,
             @RequestParam("genero") String genero,
             @RequestParam("sinopsis") String sinopsis,
-            @RequestParam("imagenPortada") String imagenPortada,
+            @RequestParam("file") MultipartFile foto,
             @RequestParam("actores") List<Integer> actoresIds,
             Model model, RedirectAttributes attributes) {
 
+
+
         // Crear una instancia de Pelicula y establecer sus propiedades
-        Pelicula pelicula = new Pelicula();
-        pelicula.setTitulo(titulo);
-        pelicula.setAnno(anno);
-        pelicula.setDuracion(duracion);
-        pelicula.setPais(pais);
-        pelicula.setDirector(director);
-        pelicula.setGenero(genero);
-        pelicula.setSinopsis(sinopsis);
-        pelicula.setImagenPortada(imagenPortada);
-        // Establecer otras propiedades según sea necesario
+        Pelicula peliculaNueva = new Pelicula();
+        peliculaNueva.setTitulo(titulo);
+        peliculaNueva.setAnno(anno);
+        peliculaNueva.setDuracion(duracion);
+        peliculaNueva.setPais(pais);
+        peliculaNueva.setDirector(director);
+        peliculaNueva.setGenero(genero);
+        peliculaNueva.setSinopsis(sinopsis);
 
-        // Obtener la lista de actores a partir de los IDs
-        // List<Actor> actores = actoresService.buscarActoresPorIds(actoresIds);
+        if (!foto.isEmpty()) {
 
+            if (pelicula.getId() != null && pelicula.getId() > 0 && pelicula.getImagenPortada() != null
+                    && pelicula.getImagenPortada().length() > 0) {
+                uploadFileService.delete(pelicula.getImagenPortada());
+            }
 
-        //pelicula.setActores(new HashSet<>(actores));
+            String uniqueFilename = null;
+            try {
+                uniqueFilename = uploadFileService.copy(foto);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            attributes.addFlashAttribute("msg", "Has subido correctamente '" + uniqueFilename + "'");
+
+            peliculaNueva.setImagenPortada(uniqueFilename);
+        }
+
         // Establecer la lista de actores en la película
-        //pelicula.setActores((Set<Actor>) actores);
+
         PeliculaRequest peliculaRequest = new PeliculaRequest();
-        peliculaRequest.setPelicula(pelicula);
+        peliculaRequest.setPelicula(peliculaNueva);
         peliculaRequest.setIds(actoresIds);
 
-
-        // Guardar la película
-        peliculasService.guardarPelicula(peliculaRequest);
-     /*   if(pelicula != null){
-            peliculasService.guardarPelicula(pelicula);
-        }*/
+        if (pelicula.getId() != null){
+            // editar pelicula
+            peliculaRequest.setId(pelicula.getId());
+            peliculasService.actualizarPelicula(peliculaRequest);
+            attributes.addFlashAttribute("msg", "Los datos de la película fueron editados!");
+        }else{
+            // Guardar la nueva película
+            peliculasService.guardarPelicula(peliculaRequest);
+            attributes.addFlashAttribute("msg", "Los datos de la película fueron guardados!");
+        }
 
         model.addAttribute("titulo", "Nueva película");
-        attributes.addFlashAttribute("msg", "Los datos de la película fueron guardados!");
+
         return "redirect:/peliculas/listado";
     }
 
@@ -157,13 +182,10 @@ public class PeliculasController {
     public String editarPelicula(Model model, @PathVariable("id") Integer id) {
         Pelicula pelicula = peliculasService.buscarPeliculaPorId(id);
         List<Actor> actoresEnPelicula = peliculasService.buscarActoresEnPelicula(id);
-        for (Actor actor : actoresEnPelicula) {
-            System.out.println("Actor en la película: " + actor);
-        }
         model.addAttribute("titulo", "Editar película");
         model.addAttribute("actores", actoresService.buscarTodos());
         model.addAttribute("pelicula", pelicula);
-        model.addAttribute("actoresEnPelicula", actoresEnPelicula); // Nueva línea
+        model.addAttribute("actoresEnPelicula", actoresEnPelicula);
 
         return "peliculas/formPelicula";
     }

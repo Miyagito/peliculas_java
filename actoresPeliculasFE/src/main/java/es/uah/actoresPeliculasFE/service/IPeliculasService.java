@@ -32,6 +32,6 @@ public interface IPeliculasService {
 
     void eliminarPelicula(Integer id);
 
-    void actualizarPelicula(Pelicula pelicula);
+    void actualizarPelicula(PeliculaRequest pelicula);
 }
 

@@ -6,14 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Listado de Actores</title>
   <!-- Agrega los enlaces a los archivos CSS de Bootstrap aquí -->
-
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body>
 
 <div class="container mt-4">
-  <h2 th:text="${titulo}"></h2>
-
+  <h2 th:text="${titulo}" class="text-center mb-4"></h2>
+  <!-- Agrega el botón de regreso al home -->
+  <div class="text-center mb-3">
+    <a class="btn btn-primary" th:href="@{/peliculas/}" role="button">
+      Regresar al Home
+    </a>
+  </div>
   <!-- Mensaje de éxito o error, si es necesario -->
   <div th:if="${msg != null}" class="alert alert-success" role="alert" th:text="${msg}"></div>
 
@@ -24,26 +28,55 @@
   <table class="table">
     <thead>
     <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Fecha de Nacimiento</th>
-      <th>País</th>
+      <th class="text-center">ID</th>
+      <th class="text-center">Nombre</th>
+      <th class="text-center">Fecha de Nacimiento</th>
+      <th class="text-center">País</th>
+      <th class="text-center">Películas</th>
       <!-- Agrega más columnas según tus necesidades -->
-      <th>Acciones</th>
+      <th class="text-center">Acciones</th>
     </tr>
     </thead>
     <tbody>
     <!-- Iteración sobre la lista de actores -->
     <tr th:each="actor : ${listadoActores}">
-      <td th:text="${actor.id}"></td>
-      <td th:text="${actor.nombre}"></td>
-      <td th:text="${actor.fechaNacimiento}"></td>
-      <td th:text="${actor.paisNacimiento}"></td>
-      <!-- Agrega más celdas según tus necesidades -->
-      <td>
-        <!-- Enlaces para editar y borrar un actor -->
-        <a class="btn btn-info btn-sm" th:href="@{/actores/editar/{id}(id=${actor.id})}">Editar</a>
-        <a class="btn btn-danger btn-sm" th:href="@{/actores/borrar/{id}(id=${actor.id})}" onclick="return confirm('¿Estás seguro?')">Borrar</a>
+      <td class="text-center" th:text="${actor.id}"></td>
+      <td class="text-center" th:text="${actor.nombre}"></td>
+      <td class="text-center" th:text="${actor.fechaNacimiento}"></td>
+      <td class="text-center" th:text="${actor.paisNacimiento}"></td>
+      <td class="text-center">
+        <!-- Botón para mostrar modal de películas del actor -->
+        <button type="button" class="btn btn-link" data-toggle="modal" th:data-target="'#peliculasModal' + ${actor.id}">
+          Ver películas
+        </button>
+
+        <!-- Modal de películas del actor -->
+        <div class="modal fade" th:id="'peliculasModal' + ${actor.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" th:text="${'Películas de ' + actor.nombre}"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Lista de películas del actor -->
+                <ul>
+                  <!-- Iteración sobre la lista de películas -->
+                  <li th:each="pelicula : ${actor.peliculas}" th:text="${pelicula.titulo}"></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <!-- Enlaces para editar y borrar un actor -->
+      <td class="text-center">
+        <div>
+          <a class="btn btn-info btn-sm" th:href="@{/actores/editar/{id}(id=${actor.id})}">Editar</a>
+          <a class="btn btn-danger btn-sm" th:href="@{/actores/borrar/{id}(id=${actor.id})}" onclick="return confirm('¿Estás seguro?')">Borrar</a>
+        </div>
       </td>
     </tr>
     </tbody>

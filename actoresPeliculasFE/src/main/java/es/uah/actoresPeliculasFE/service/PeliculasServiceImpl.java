@@ -125,8 +125,8 @@ public class PeliculasServiceImpl implements IPeliculasService {
     }
 
     @Override
-    public void actualizarPelicula(Pelicula pelicula) {
-        template.put(api, pelicula);
+    public void actualizarPelicula(PeliculaRequest pelicula) {
+        template.put(api, pelicula, String.class);
     }
 
     // Puedes agregar más métodos según tus necesidades

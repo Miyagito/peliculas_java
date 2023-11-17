@@ -6,6 +6,8 @@ public class PeliculaDTO {
     private Pelicula pelicula;
     private List<Integer> ids;
 
+    private  Integer id;
+
     public Pelicula getPelicula() {
         return pelicula;
     }
@@ -16,6 +18,10 @@ public class PeliculaDTO {
 
     public List<Integer> getIds() {
         return ids;
+    }
+
+    public Integer getId(){
+        return id;
     }
 
     public void setIds(List<Integer> ids) {
