@@ -5,7 +5,7 @@ import java.util.List;
 public class UserCredentials {
     private String correo;
     private String password;
-    private List<Integer> idRoles;
+    private Integer idRoles;
     // Getters y setters
     public String getCorreo() {
         return correo;
@@ -22,8 +22,8 @@ public class UserCredentials {
         this.password = password;
     }
 
-    public List<Integer> getIdRoles(){ return idRoles; }
+    public Integer getIdRoles(){ return idRoles; }
 
-    public void setIdRoles( List<Integer> idRoles ) { this.idRoles = idRoles; }
+    public void setIdRoles( Integer idRoles ) { this.idRoles = idRoles; }
 }
 

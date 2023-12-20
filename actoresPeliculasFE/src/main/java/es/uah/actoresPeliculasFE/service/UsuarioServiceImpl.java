@@ -1,6 +1,5 @@
 package es.uah.actoresPeliculasFE.service;
 
-import es.uah.actoresPeliculasFE.model.Actor;
 import es.uah.actoresPeliculasFE.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,7 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -27,7 +25,7 @@ public class UsuarioServiceImpl implements IUsuariosService {
 
     @Override
     public Page<Usuario> buscarTodos(String query, String tipo, Pageable pageable) {
-        //String url = api + "/buscar?" + "tipo=" + tipo + "&" + "query=" + query;
+
         Usuario[] usuarios = template.getForObject(url, Usuario[].class);
         List<Usuario> usuariosList = Arrays.asList(usuarios);
         int pageSize = pageable.getPageSize();
@@ -60,13 +58,12 @@ public class UsuarioServiceImpl implements IUsuariosService {
         }
     }
     @Override
-    public List<Usuario> buscarUsuarioPorNombre(String nombre) {
-        return Collections.singletonList(template.getForObject(url + "/nombre/" + nombre, Usuario.class));
+    public Usuario buscarUsuarioPorNombre(String nombre) {
+        return template.getForObject(url + "/nombre/" + nombre, Usuario.class);
     }
 
-    @Override
-    public List<Usuario> buscarUsuarioPorCorreo(String correo) {
-        return Collections.singletonList(template.getForObject(url + "/correo/" + correo, Usuario.class));
+    public Usuario buscarUsuarioPorCorreo(String correo) {
+        return template.getForObject(url + "/correo/" + correo, Usuario.class);
     }
 
     @Override
@@ -90,3 +87,4 @@ public class UsuarioServiceImpl implements IUsuariosService {
         template.delete(deleteUrl);
     }
 }
+

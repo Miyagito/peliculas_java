@@ -11,8 +11,8 @@ public interface IUsuariosService {
     Page<Usuario> buscarTodos(String query, String tipo, Pageable pageable);
     List<Usuario> buscarTodos();
     Usuario buscarUsuarioPorId(Integer id);
-    List <Usuario> buscarUsuarioPorNombre(String nombre);
-    List <Usuario> buscarUsuarioPorCorreo(String correo);
+    Usuario buscarUsuarioPorNombre(String nombre);
+    Usuario buscarUsuarioPorCorreo(String correo);
     void guardarOEditarUsuario(Usuario actor);
     void eliminarUsuario(Integer id);
 }

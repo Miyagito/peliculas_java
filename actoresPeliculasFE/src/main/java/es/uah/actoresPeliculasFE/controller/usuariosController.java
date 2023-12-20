@@ -40,8 +40,10 @@ IAuthoritiesService authoritiesService;
 
     @GetMapping("/nuevo")
     public String nuevoUsuario(Model model) {
+        List<Authorities> allRoles = authoritiesService.buscarTodos();
         model.addAttribute("titulo", "Nuevo Usuario");
         model.addAttribute("usuario", new Usuario());
+        model.addAttribute("allRoles",allRoles );
         return "usuarios/formUsuario";
     }
 
@@ -68,14 +70,11 @@ IAuthoritiesService authoritiesService;
         authority.setIdRol(idRol);
         authority.setAuthority(authorityValue);
 
-        // Crea una lista y agrega la autoridad
         List<Authorities> authoritiesList = new ArrayList<>();
         authoritiesList.add(authority);
 
-        // Suponiendo que Usuario tiene un método setAuthorities() que acepta una List
         usuario.setAuthorities(authoritiesList);
 
-        // Procede a guardar o editar el usuario
         usuariosService.guardarOEditarUsuario(usuario);
 
         String mensaje = (usuario.getIdUsuario() != null)
@@ -84,9 +83,6 @@ IAuthoritiesService authoritiesService;
         attributes.addFlashAttribute("msg", mensaje);
         return "redirect:/usuarios/listado";
     }
-
-
-
 
     @GetMapping("/borrar/{id}")
     public String eliminarUsuario(Model model, @PathVariable("id") Integer id, RedirectAttributes attributes) {

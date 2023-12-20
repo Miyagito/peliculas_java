@@ -57,14 +57,20 @@ public class LoginController {
                 response.addCookie(userInfoCookie);
 
                 // Redirecciona según los roles del usuario
-                List<Integer> roles = authenticatedUser.getIdRoles();
-                if (roles.contains(1) && roles.contains(2)) {
-                    return "redirect:/rolSelection";
-                } else if (roles.contains(1)) {
-                    return "redirect:/admin-home";
-                } else if (roles.contains(2)) {
-                    // Redirecciona a otra vista si el rol es 2
-                    return "redirect:/user-home"; // Asumiendo que la vista para el rol 2 es 'user-home'
+                Integer rolId = authenticatedUser.getIdRoles();
+
+                if (rolId != null) {
+                    if (rolId == 1) {
+                        // El usuario tiene el rol 1
+                        return "redirect:/admin-home";
+                    } else if (rolId == 2) {
+                        // El usuario tiene el rol 2
+                        return "redirect:/user-home";
+                    }
+                    // Agrega más condicionales según sea necesario para otros roles
+                } else {
+                    // El usuario no tiene ningún rol asignado
+                    return "redirect:/login?error";
                 }
             } catch (JsonProcessingException e) {
                 e.printStackTrace(); // Log the exception or handle it as you deem necessary

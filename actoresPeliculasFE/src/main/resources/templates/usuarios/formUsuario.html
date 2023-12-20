@@ -92,15 +92,25 @@
     }
   }
 
+  function setInitialRoleValues() {
+    var rolSelect = document.getElementById('rol');
+    var selectedOption = rolSelect.options[rolSelect.selectedIndex];
+    var idRolInput = document.getElementById('idRol');
+    var authorityInput = document.getElementById('authority');
+
+    // Establecer los valores iniciales
+    if (selectedOption && selectedOption.getAttribute('data-authority')) {
+      idRolInput.value = selectedOption.value;
+      authorityInput.value = selectedOption.getAttribute('data-authority');
+    }
+  }
 
   document.addEventListener('DOMContentLoaded', function() {
+    setInitialRoleValues();
     var rolSelect = document.getElementById('rol');
-    updateRoleId(); // Set the initial value on page load
-    rolSelect.addEventListener('change', updateRoleId); // Update on change
+    rolSelect.addEventListener('change', updateRoleIdAndAuthority);
   });
-
 </script>
-
 
 </body>
 </html>
