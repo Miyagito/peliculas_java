@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Listado de Usuarios</title>
+  <!-- Bootstrap CSS desde CDN -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    .container {
+      margin-top: 6rem;
+      margin-bottom: 3rem;
+    }
+
+    .table {
+      margin-top: 2rem;
+    }
+
+    .table th, .table td {
+      padding: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+  <h2 class="text-center mb-5">Listado de Usuarios</h2>
+  <div class="text-center mt-3">
+    <a class="btn btn-primary" th:href="@{/admin-home}" role="button">Regresar al Home</a>
+  </div>
+
+  <div th:if="${msg != null}" class="alert alert-success" role="alert" th:text="${msg}"></div>
+
+  <!-- Formulario de búsqueda -->
+  <div class="row mb-2 d-flex justify-content-between">
+    <div class="col-md-6">
+      <form id="searchForm" class="form-inline" th:action="@{/usuarios/listado}" method="get">
+        <div class="input-group">
+          <select id="tipo" class="form-control" name="tipo">
+            <option value="todos">Todos</option>
+            <option value="nombre">Nombre</option>
+            <option value="correo">Correo</option>
+          </select>
+          <input class="form-control" type="text" placeholder="Buscar" aria-label="Buscar" id="query" name="query">
+          <button class="btn btn-primary" type="submit">Buscar</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-6 text-right">
+      <a class="btn btn-primary" th:href="@{/usuarios/nuevo}">Nuevo Usuario</a>
+    </div>
+  </div>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th class="text-center">ID</th>
+      <th class="text-center">Nombre</th>
+      <th class="text-center">Correo</th>
+      <th class="text-center">Criticas</th>
+      <th class="text-center">Roles</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="usuario : ${listadoUsuarios}">
+      <td class="text-center" th:text="${usuario.idUsuario}"></td>
+      <td class="text-center" th:text="${usuario.username}"></td>
+      <td class="text-center" th:text="${usuario.correo}"></td>
+      <td class="text-center">
+        <div th:if="${usuario.authorities.size() > 0}">
+          <div th:each="authority, iterStat : ${usuario.authorities}">
+            <span class="badge badge-pill badge-secondary mr-1" th:text="${authority.authority}"></span>
+            <th:block th:if="${iterStat.last}" class="mb-2"></th:block>
+          </div>
+        </div>
+        <span th:if="${usuario.authorities.size() == 0}">No tiene rol</span>
+      </td>
+      <td class="text-center">
+        <div class="btn-group">
+          <a class="btn btn-warning btn-sm mr-2" th:href="@{/usuarios/editar/{id}(id=${usuario.idUsuario})}">Editar</a>
+          <a class="btn btn-danger btn-sm" th:href="@{/usuarios/borrar/{id}(id=${usuario.idUsuario})}" onclick="return confirm('¿Estás seguro?')">Borrar</a>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div th:replace="paginator-nav :: paginator"></div>
+
+</div>
+
+<!-- Bootstrap y jQuery desde CDN -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>

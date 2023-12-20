@@ -27,12 +27,11 @@
         <!-- Columna izquierda -->
         <div class="mb-3">
           <img th:if="${pelicula.imagenPortada != null && #strings.length(pelicula.imagenPortada) > 0}"
-               class="img-thumbnail rounded float-left" style="max-width: 25%;"
+               class="img-thumbnail rounded float-left";
                th:src="@{'/peliculas/uploads/' + ${pelicula.imagenPortada}}" th:alt="${pelicula.imagenPortada}" />
-
           <div class="mb-3">
             <label for="file" class="col-sm-2 col-form-label">Imagen</label>
-            <div class="col-sm-6">
+            <div class="mb-3">
               <input type="file" id="file" name="file" class="form-control" />
             </div>
           </div>
@@ -44,12 +43,12 @@
         </div>
         <div class="mb-3">
           <label for="anno" class="form-label">Año</label>
-          <input type="text" class="form-control" th:field="*{anno}" id="anno" name="anno"
+          <input pattern="[0-9]*" type="number" class="form-control" th:field="*{anno}" id="anno" name="anno"
                  placeholder="Escriba el año de la película" required="required">
         </div>
         <div class="mb-3">
           <label for="duracion" class="form-label">Duración</label>
-          <input type="text" class="form-control" th:field="*{duracion}" id="duracion" name="duracion"
+          <input type="number" class="form-control" th:field="*{duracion}" id="duracion" name="duracion"
                  placeholder="Escriba la duración de la película" required="required">
         </div>
       </div>

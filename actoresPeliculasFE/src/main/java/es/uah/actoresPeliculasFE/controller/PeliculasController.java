@@ -48,11 +48,6 @@ public class PeliculasController {
     private IUploadFileService uploadFileService;
 
 
-    @GetMapping("/")
-    public String home() {
-        return "home";
-    }
-
     @GetMapping("/busqueda")
     public String search(Model model) {
         return "peliculas/search";
@@ -109,7 +104,6 @@ public class PeliculasController {
     }
 
     @RequestMapping(value = "/guardar", method = {RequestMethod.POST, RequestMethod.PUT})
-    //@PostMapping({"/guardar"})
     public String guardarPelicula(
             @ModelAttribute Pelicula pelicula,
             @RequestParam("titulo") String titulo,

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>ActoresApp | Nuevo Usuario</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+  <h2 th:text="${titulo}" class="text-secondary border-bottom pb-2"></h2>
+
+  <div th:if="${msg != null}" class="alert alert-success mt-3" role="alert" th:text="${msg}"></div>
+
+  <form th:action="@{/usuarios/guardar}" method="post" th:object="${usuario}">
+    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger mt-3" role="alert">
+      <strong>Por favor corrija los siguientes errores:</strong>
+      <ul class="mb-0">
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+      </ul>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <!-- Nombre del usuario -->
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input type="text" class="form-control" th:field="*{username}" id="nombre" name="nombre"
+                 placeholder="Escriba el nombre del usuario" required>
+        </div>
+        <!-- Correo electrónico -->
+        <div class="mb-3">
+          <label for="correo" class="form-label">Correo electrónico</label>
+          <input type="email" class="form-control" th:field="*{correo}" id="correo" name="correo"
+                 placeholder="Escriba el correo electrónico del usuario" required>
+        </div>
+        <!-- Contraseña -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input type="password" class="form-control" th:field="*{password}" id="password" name="password"
+                 placeholder="Escriba una contraseña" required>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <!-- Rol del usuario -->
+        <div class="mb-3">
+          <label for="rol" class="form-label">Rol</label>
+          <select class="form-control" id="rol" required onchange="updateRoleIdAndAuthority()">
+            <option value="">Seleccione un rol</option>
+            <option th:each="role : ${allRoles}"
+                    th:value="${role.idRol}"
+                    th:text="${role.authority}"
+                    th:selected="${usuario.authorities != null and !usuario.authorities.isEmpty() and role.idRol == usuario.authorities[0]?.idRol}"
+                    th:data-authority="${role.authority}">
+              Texto del rol
+            </option>
+          </select>
+          <input type="hidden" id="idRol" name="idRol" />
+          <input type="hidden" id="authority" name="authority" />
+        </div>
+        <!-- Campo checkbox para 'enable' -->
+        <div class="mb-3 form-check">
+          <input class="form-check-input" type="checkbox" th:field="*{enable}" id="enable" />
+          <label for="enable" class="form-check-label">Habilitado</label>
+        </div>
+      </div>
+    </div>
+    <!-- Botón de envío -->
+    <button type="submit" class="btn btn-dark">Guardar Usuario</button>
+    <input type="hidden" th:field="*{idUsuario}" />
+  </form>
+
+  <hr class="mt-4">
+  <a class="btn btn-primary" th:href="@{/usuarios/listado}" role="button">Ir a Listado de Usuarios</a>
+</div>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+  function updateRoleIdAndAuthority() {
+    var rolSelect = document.getElementById('rol');
+    var selectedOption = rolSelect.options[rolSelect.selectedIndex];
+    var idRolInput = document.getElementById('idRol');
+    var authorityInput = document.getElementById('authority');
+
+    if (selectedOption) {
+      idRolInput.value = selectedOption.value;
+      authorityInput.value = selectedOption.getAttribute('data-authority');
+    }
+  }
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var rolSelect = document.getElementById('rol');
+    updateRoleId(); // Set the initial value on page load
+    rolSelect.addEventListener('change', updateRoleId); // Update on change
+  });
+
+</script>
+
+
+</body>
+</html>

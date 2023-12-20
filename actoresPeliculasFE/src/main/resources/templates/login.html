@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Login</title>
+
+  <!-- Bootstrap CSS desde CDN -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h2 class="text-center">Iniciar sesión</h2>
+
+      <!-- Formulario de login -->
+      <form id="loginForm" th:action="@{/login}" method="post">
+        <div class="form-group">
+          <label for="correo">Correo electrónico</label>
+          <input type="email" class="form-control" id="correo" name="correo" placeholder="Ingrese su correo">
+        </div>
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese su contraseña">
+        </div>
+        <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+      </form>
+
+      <!-- Mensajes de error, si es necesario -->
+      <div th:if="${loginError != null}" class="alert alert-danger mt-3" role="alert">
+        Credenciales inválidas, intente nuevamente.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts de Bootstrap y jQuery -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>

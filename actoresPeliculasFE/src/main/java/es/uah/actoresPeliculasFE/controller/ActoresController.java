@@ -24,11 +24,6 @@ public class ActoresController {
     @Autowired
     IActoresService actoresService;
 
-    @GetMapping("/home")
-    public String home(Model model) {
-        return "home";
-    }
-
     @GetMapping("/listado")
     public String listadoActores(Model model, @RequestParam(name="page", defaultValue="0") int page) {
         Pageable pageable = PageRequest.of(page, 5);

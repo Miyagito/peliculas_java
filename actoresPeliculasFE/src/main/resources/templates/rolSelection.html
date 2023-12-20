@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selección de Rol</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    body {
+      padding-top: 70px; /* Espacio para la barra de navegación fija */
+    }
+    .navbar-brand {
+      font-weight: bold;
+    }
+    .list-group-item {
+      cursor: pointer; /* Indica que es clickeable */
+      text-align: center;
+    }
+    .list-group-item:hover {
+      background-color: #f8f9fa; /* Efecto hover para indicar acción */
+    }
+    .container-role-selection {
+      width: 100%; /* Utiliza todo el ancho disponible */
+      max-width: 330px; /* Máximo ancho del contenedor */
+      padding: 15px; /* Espaciado interior */
+      margin: auto; /* Centrado automático */
+    }
+    .navbar {
+      background-color: #007bff; /* Color de fondo */
+    }
+    .navbar-dark .navbar-nav .nav-link {
+      color: rgba(255,255,255,.5); /* Color de los enlaces */
+    }
+    .navbar-dark .navbar-nav .nav-link:hover {
+      color: rgba(255,255,255,.75); /* Color de los enlaces al pasar el mouse */
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">ActoresApp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="logout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-role-selection">
+  <h2 class="text-center mb-4">Selecciona tu Rol</h2>
+  <div class="list-group">
+    <a href="/admin-home" class="list-group-item list-group-item-action">Administrador</a>
+    <a href="/ruta-usuario" class="list-group-item list-group-item-action">Usuario</a>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+  // ... El resto de tus scripts
+
+  function logout() {
+    // Sobrescribe la cookie con una fecha de expiración en el pasado
+    document.cookie = "userInfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    // Redirecciona al login
+    window.location.href = '/login';
+  }
+</script>
+
+</body>
+</html>
