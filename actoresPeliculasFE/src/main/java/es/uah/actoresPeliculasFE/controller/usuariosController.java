@@ -5,6 +5,7 @@ import es.uah.actoresPeliculasFE.model.Usuario;
 import es.uah.actoresPeliculasFE.paginator.PageRender;
 import es.uah.actoresPeliculasFE.service.IAuthoritiesService;
 import es.uah.actoresPeliculasFE.service.IUsuariosService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,13 +28,18 @@ IUsuariosService usuariosService;
 @Autowired
 IAuthoritiesService authoritiesService;
 
+    @GetMapping("/busqueda")
+    public String search(Model model) {
+        return "usuarios/search";
+    }
     @GetMapping("/listado")
-    public String listadoUsuarios(Model model, @RequestParam(name = "query", required = false) String query, @RequestParam(name = "tipo", required = false) String tipo, @RequestParam(name = "page", defaultValue = "0") int page) {
+    public String listadoUsuarios(HttpServletRequest request, Model model, @RequestParam(name = "query", required = false) String query, @RequestParam(name = "tipo", required = false) String tipo, @RequestParam(name = "page", defaultValue = "0") int page) {
         Pageable pageable = PageRequest.of(page, 5);
-        Page<Usuario> listado = usuariosService.buscarTodos(query, tipo, pageable);
-        PageRender<Usuario> pageRender = new PageRender<Usuario>("/usuarios/listado", listado);
+        Page<Usuario> listadoDeUsuarios;
+        listadoDeUsuarios = usuariosService.buscarUsuarios(query, tipo, pageable);
+        PageRender<Usuario> pageRender = new PageRender<Usuario>("/usuarios/listado", listadoDeUsuarios);
         model.addAttribute("titulo", "Listado de todos los actores");
-        model.addAttribute("listadoUsuarios", listado);
+        model.addAttribute("listadoUsuarios", listadoDeUsuarios);
         model.addAttribute("page", pageRender);
         return "usuarios/listaUsuarios";
     }
@@ -95,11 +101,6 @@ IAuthoritiesService authoritiesService;
         }
 
         return "redirect:/usuarios/listado";
-    }
-
-    @GetMapping("/busqueda")
-    public String search(Model model) {
-        return "usuarios/search";
     }
 
 }
