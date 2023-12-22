@@ -42,7 +42,6 @@
           <select id="tipo" class="form-control" name="tipo">
             <option value="todos">Todos</option>
             <option value="nombre">Nombre</option>
-            <option value="correo">Correo</option>
           </select>
           <input class="form-control" type="text" placeholder="Buscar" aria-label="Buscar" id="query" name="query">
           <button class="btn btn-primary" type="submit">Buscar</button>
@@ -87,9 +86,7 @@
     </tr>
     </tbody>
   </table>
-
   <div th:replace="paginator-nav :: paginator"></div>
-
 </div>
 
 <!-- Bootstrap y jQuery desde CDN -->

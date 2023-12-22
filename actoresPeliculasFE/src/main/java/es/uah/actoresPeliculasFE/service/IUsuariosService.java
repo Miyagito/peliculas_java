@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface IUsuariosService {
     Page<Usuario> buscarUsuarios(String query, String tipo, Pageable pageable);
-    Page<Usuario> buscarTodos(String query, String tipo, Pageable pageable);
     Usuario buscarUsuarioPorId(Integer id);
     void guardarOEditarUsuario(Usuario actor);
     void eliminarUsuario(Integer id);

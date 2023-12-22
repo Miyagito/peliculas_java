@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Listado de Críticas</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-4">
+  <h2 class="text-center mb-5">Listado de Críticas de Películas</h2>
+
+  <!-- Agrega el botón de regreso al home -->
+  <div class="text-center mt-3">
+    <a class="btn btn-primary" th:href="@{/admin-home}" role="button">
+      Regresar al Home
+    </a>
+  </div>
+  <!-- Mensaje de éxito o error, si es necesario -->
+  <div th:if="${msg != null}" class="alert alert-success" role="alert" th:text="${msg}"></div>
+
+
+  <!-- Formulario de búsqueda -->
+  <div class="row mb-4 d-flex justify-content-between">
+    <div class="col-md-6">
+      <form id="searchForm" class="form-inline" th:action="@{/criticas/listado}" method="get">
+        <div class="input-group">
+          <select id="tipo" class="form-control" name="tipo">
+            <option value="calificacion">Calificación</option>
+          </select>
+          <input class="form-control" type="text" placeholder="Buscar" aria-label="Buscar" id="query" name="query">
+          <button class="btn btn-primary" type="submit">Buscar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tabla de críticas -->
+  <table class="table">
+    <thead>
+    <tr>
+      <th class="text-center">ID Crítica</th>
+      <th class="text-center">Película</th>
+      <th class="text-center">Calificación</th>
+      <th class="text-center">Texto de la Crítica</th>
+      <th class="text-center">Fecha</th>
+      <th class="text-center">Usuario</th>
+      <th class="text-center">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="critica : ${listadoCriticas}">
+      <td class="text-center" th:text="${critica.idCriticas}"></td>
+      <td class="text-center" th:text="${peliculasNombres[critica.idPelicula]}"></td>
+      <td class="text-center" th:text="${critica.nota}"></td>
+      <td class="text-center" th:text="${critica.valoracion}"></td>
+      <td class="text-center" th:text="${critica.fecha}"></td>
+      <td class="text-center" th:text="${critica.user.username}"></td>
+      <td class="text-center">
+        <a class="btn btn-danger btn-sm" th:href="@{/criticas/borrar/{id}(id=${critica.idCriticas})}" onclick="return confirm('¿Estás seguro?')">Borrar</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div th:replace="paginator-nav :: paginator"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

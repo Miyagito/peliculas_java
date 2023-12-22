@@ -85,7 +85,6 @@ public class PeliculasServiceImpl implements IPeliculasService {
 
     @Override
     public Pelicula buscarPeliculaPorId(Integer id) {
-
         Pelicula pelicula =  template.getForObject(api + "/" + id, Pelicula.class);
         return pelicula;
     }

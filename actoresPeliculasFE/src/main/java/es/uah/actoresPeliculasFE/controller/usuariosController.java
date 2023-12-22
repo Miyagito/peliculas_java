@@ -33,7 +33,10 @@ IAuthoritiesService authoritiesService;
         return "usuarios/search";
     }
     @GetMapping("/listado")
-    public String listadoUsuarios(HttpServletRequest request, Model model, @RequestParam(name = "query", required = false) String query, @RequestParam(name = "tipo", required = false) String tipo, @RequestParam(name = "page", defaultValue = "0") int page) {
+    public String listadoUsuarios(HttpServletRequest request, Model model,
+                                  @RequestParam(name = "query", required = false) String query,
+                                  @RequestParam(name = "tipo", required = false) String tipo,
+                                  @RequestParam(name = "page", defaultValue = "0") int page) {
         Pageable pageable = PageRequest.of(page, 5);
         Page<Usuario> listadoDeUsuarios;
         listadoDeUsuarios = usuariosService.buscarUsuarios(query, tipo, pageable);

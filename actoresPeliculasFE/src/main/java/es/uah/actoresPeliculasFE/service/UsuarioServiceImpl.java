@@ -25,9 +25,6 @@ public class UsuarioServiceImpl implements IUsuariosService {
 
     @Override
     public Page<Usuario> buscarUsuarios(String query, String tipo, Pageable pageable) {
-        if (tipo == "Año") {
-            tipo = "anno";
-        }
         String api = url + "/buscar?" + "tipo=" + tipo + "&" + "query=" + query;
         Usuario[] usuarios = template.getForObject(api, Usuario[].class);
         List<Usuario> usuariosList = Arrays.asList(usuarios);
@@ -36,26 +33,6 @@ public class UsuarioServiceImpl implements IUsuariosService {
         int startItem = currentPage * pageSize;
         List<Usuario> list;
         if (usuariosList.size() < startItem) {
-            list = Collections.emptyList();
-        } else {
-            int toIndex = Math.min(startItem + pageSize, usuariosList.size());
-            list = usuariosList.subList(startItem, toIndex);
-        }
-        Page<Usuario> page = new PageImpl<>(list, PageRequest.of(currentPage, pageSize), usuariosList.size());
-        return page;
-    }
-
-    @Override
-    public Page<Usuario> buscarTodos(String query, String tipo, Pageable pageable) {
-
-        Usuario[] usuarios = template.getForObject(url, Usuario[].class);
-        List<Usuario> usuariosList = Arrays.asList(usuarios);
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<Usuario> list;
-
-        if(usuariosList.size() < startItem) {
             list = Collections.emptyList();
         } else {
             int toIndex = Math.min(startItem + pageSize, usuariosList.size());
